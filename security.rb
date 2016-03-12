@@ -14,7 +14,6 @@ require 'yaml'
 class Security
   attr_accessor :key
   attr_reader :text
-  attr_accessor :fodersHash
   def initialize
     @key = ""
     @text = []
