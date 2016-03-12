@@ -17,8 +17,8 @@ begin
 
   if File.exist? filePath
     #continue
-    puts "    (no extension on the new name*! )   "
-    puts "    new file name:"
+    puts "    (no extension on the new name*! )   ",
+    "    new file name:"
     print "                 :"
     newName = gets.chomp
     puts "    key:"
@@ -31,8 +31,8 @@ begin
     puts "file or folder not finded '#{filePath}'"
   end
 rescue
-  puts 'ERROR:'
-  puts "file or folder not finded '#{filePath}'"
-  puts $!
-  puts $!.backtrace
+  puts 'ERROR:',
+  "file or folder not finded '#{filePath}'",
+  $!, 
+  $!.backtrace
 end
