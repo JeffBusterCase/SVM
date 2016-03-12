@@ -4,7 +4,7 @@
 # Need to be the same version;
 # In the compacted file will be the version of the SVM
 # after the compacting, the 'svm.rb' file will be overrated by new code
-# instead of a compancter will be descompacter and run the program
+# instead of a compacter will be descompacter and run the program
 $version = "0.6"
 
 
