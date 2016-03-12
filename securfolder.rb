@@ -4,8 +4,8 @@
 
 require '.\\security.rb'
 
-puts "(Entire Path*)"
-puts "File:"
+puts "(Entire Path*)",
+     "File:"
 fileDir = gets.chomp
 instance = Security.new
 
@@ -19,9 +19,9 @@ if File.exist? fileDir
     begin
       instance.createInstanceFolder fileDir, newfilename, key
     rescue
-      puts "-- #<folder: nameOfTheMainFolder> --not finded in the first line.*"
-      puts $!
-      puts $!.backtrace
+      puts "-- #<folder: nameOfTheMainFolder> --not finded in the first line.*",
+      $!,
+      $!.backtrace
     end
 else
   puts "Folder not finded"
