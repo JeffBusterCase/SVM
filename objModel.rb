@@ -5,11 +5,11 @@ require '.\\security'
 
 fileHash = {}
 instance = Security.new
-puts "    local do arquivo:"
+puts "    file path:"
 print "\n                     "
 local = gets.chomp
 
-puts "     Key:"
+puts "     Key to descompile:"
 print "\n        "
 key = gets.chomp
 
@@ -29,8 +29,7 @@ fileHash.each { |key, value|
   end
 }
 
-#descompactação
-#Na folder temp
+#Descompile in Temp folder
 $FILEHASH = fileHash
 
 if !( Dir.exist? (".\\temp\\#{$FILEHASH[:info][:folder]}") )
@@ -70,7 +69,7 @@ makeFile "info.txt",  fileHash[:info].to_s,
 "\n\nFiles:\n#{ fileHash[:filesFF].to_s}",
 "\n\nFolders:\n#{ fileHash[:allFolders].to_s}"
 
-#despejar todos os arquivos
+#Put all files and folders
 makeFolders
 fileHash.each { |key, value|
   puts "\n\n =====* *=====* *=====* *======* *=====* *=====\n", key
@@ -89,5 +88,5 @@ fileHash.each { |key, value|
   end
 }
 
-#RUN THAT BITCH
+#go to the folder and run the principal program (With the same name as the folder)
 system "cd temp/#{fileHash[:info][:folder]} & start #{fileHash[:info][:folder]}.rb"
