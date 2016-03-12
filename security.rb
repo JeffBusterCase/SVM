@@ -38,7 +38,7 @@ class Security
 
   def getFather fileDir
     getFather = IO.readlines(fileDir)[0]
-    getFather = ((getFather.match /#<folder:(.*?)>/)[1].delete " ")
+    getFather = ((getFather.match(/#<folder:(.*?)>/))[1].delete " ")
 
     return getFather
   end
@@ -47,20 +47,22 @@ class Security
 
     getPack = getFather fileDir
 
-    @@folderPath = ( ( fileDir.match /(.*?)#{getPack}/ ) )[0]
+    @@folderPath = ( ( fileDir.match(/(.*?)#{getPack}/) ) )[0]
     return @@folderPath
   end
 
   def tramsform fileDir
     getPack = IO.readlines(fileDir)[0]
-    getPack = ((getPack.match /#<folder:(.*?)>/)[1].delete " ")
+    puts "Finded : #{getPack}"
+    p getPack.match(/#<folder:(.*?)>/)
+    getPack = ((getPack.match(/#<folder:(.*?)>/))[1].delete " ")
 
     fileHash = {info: nil}
 
 
     if (fileDir.include? getPack)
 
-      folder = ( ( fileDir.match /(.*?)#{getPack}/ ) )[0]
+      folder = ( ( fileDir.match(/(.*?)#{getPack}/) ) )[0]
 
       fileHash[:prnc] = folder
 
@@ -69,17 +71,27 @@ class Security
         File.file? f
       }
 
-      #Compila todos os aquivos da Father Folder
+      #Compile all fatherFolders arquives 
       fileHash[:filesFF] = fileS
+      p fileHash[:prnc]
       fileS.each { |f|
-        fileHash[("#{f}".to_sym)] = (secure (File.read fileHash[:prnc] + "\\#{f}"))
+        print "\nCompiling #{f}."
+        sleep 0.1
+        #Abreviate things with variables
+        tmpFile = (fileHash[:prnc] + "/#{f}");
+        #Some Error Happend that File.read not finds the File
+        tmpFile = File.read(tmpFile)#Not working in Cloud9
+        sleep 0.1
+        tmpFile = secure(tmpFile);
+        fileHash[("#{f}".to_sym)] = tmpFile;
+        print "OK\n"
       }
 
       allFolders = []
       allSubFolders = []
       Dir["**/"].each{ |directoryT|
-        allFolders << (fileHash[:prnc] + "\\" + directoryT.gsub("/", "\\"))#get all sub folders in a array
-        allSubFolders << directoryT.gsub("/", "\\")
+        allFolders << (fileHash[:prnc] + "/" + directoryT.gsub("/", "/"))#get all sub folders in a array
+        allSubFolders << directoryT.gsub("/", "/")
       }
 
       fileHash[:allFolders] = allSubFolders
@@ -90,7 +102,7 @@ class Security
           Dir.chdir(foldered)
           Dir.glob('*').each { |f|
               if File.file? f
-                  fileHash["\\#{allSubFolders[timer]}#{f}".to_sym] = (secure (File.read  "#{$folderOfNow}" + "#{f}"))
+                fileHash["/#{allSubFolders[timer]}#{f}".to_sym] = (secure (File.read  "#{$folderOfNow}" + "#{f}"))
               end
           }
           timer += 1
@@ -107,7 +119,7 @@ class Security
   end
   #security compiler for forlder xD legal né?
   def scff text, folderName, newName
-    newName = folderName + "\\" + newName.to_s
+    newName = folderName + "/" + newName.to_s
     f = File.new((newName + ".svm"), "w")
       f.puts YAML.dump(text)
     f.close
@@ -126,7 +138,7 @@ class Security
 
     pathNow = File.dirname filePath
 
-    File.open(pathNow + "\\#{newFileName}.rb", "w"){|f|
+    File.open(pathNow + "/#{newFileName}.rb", "w"){|f|
       f.puts "#|svm #{$version}",
       " ",
       "require '#{File.absolute_path __FILE__}'",
@@ -148,17 +160,21 @@ class Security
 
 
   def secure text
+     print '...'
      makeKey #get the current Key
+     print '...'
      begin
        @code_text = ""
        @text = []
        text.each_byte{ |byte|
           @text << (byte  + @Key.round - 63)
        }
+       print '.'
        ##Codeficated
        @text.each{|c|
          @code_text << c.to_i.round.chr
        }
+       print '.'
        return @code_text
      rescue
        @code_text = ""
@@ -245,7 +261,7 @@ class Security
   end
 
   def sc fileName, newName="oneTable"
-    newName = (File.dirname fileName) + "\\" + newName.to_s
+    newName = (File.dirname fileName) + "/" + newName.to_s
     text = secure(File.read(fileName))#file name must be the whole intire path of the file
     File.open((newName + ".svm"), "w") { |f|
       f.puts YAML.dump(text)
