@@ -119,9 +119,7 @@ class Security
   #security compiler for forlder xD legal né?
   def scff text, folderName, newName
     newName = folderName + "/" + newName.to_s
-    f = File.new((newName + ".svm"), "w")
-      f.puts YAML.dump(text)
-    f.close
+    File.write(newName+".svm", YAML.dump(text))
   end
 
 
@@ -261,9 +259,7 @@ class Security
 
   def sc fileName, newName="oneTable"
     newName = (File.dirname fileName) + "/" + newName.to_s
-    text = secure(File.read(fileName))#file name must be the whole intire path of the file
-    File.open((newName + ".svm"), "w") { |f|
-      f.puts YAML.dump(text)
-    }
+    text = secure(File.read(fileName))#file name must be the whole entire path of the file
+    File.write(newName+".svm", YAML.dump(text))
   end
 end
